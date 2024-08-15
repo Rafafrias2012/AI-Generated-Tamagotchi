@@ -2,25 +2,20 @@ using UnityEngine;
 
 public class MametchiController : MonoBehaviour
 {
-    public float walkSpeed = 2f;
-    public float turnSpeed = 90f;
+    public float groundOffset = 0f; // Adjust this value to fine-tune Mametchi's position above the ground
 
-    private void Update()
+    private void Start()
     {
-        // Implement walking logic here
-        Walk();
+        // Position Mametchi on the ground
+        PositionOnGround();
     }
 
-    private void Walk()
+    private void PositionOnGround()
     {
-        // Move forward
-        transform.Translate(Vector3.forward * walkSpeed * Time.deltaTime);
-
-        // Rotate randomly
-        if (Random.value < 0.02f) // 2% chance to turn each frame
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + Vector3.up * 10f, Vector3.down, out hit, Mathf.Infinity))
         {
-            float turnAmount = Random.Range(-1f, 1f);
-            transform.Rotate(Vector3.up, turnAmount * turnSpeed * Time.deltaTime);
+            transform.position = hit.point + Vector3.up * groundOffset;
         }
     }
 }
